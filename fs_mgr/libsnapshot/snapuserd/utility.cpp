@@ -138,5 +138,6 @@ bool InitializeUringForMerge(struct io_uring* ring, int queue_depth) {
 
     return true;
 }
+
 }  // namespace snapshot
 }  // namespace android
