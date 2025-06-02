@@ -33,6 +33,7 @@ class BlockDevInitializer final {
     bool InitDmUser(const std::string& name);
     bool InitDevices(std::set<std::string> devices);
     bool InitDmDevice(const std::string& device);
+    bool InitUblkMiscDevices(const std::string& name);
 
   private:
     ListenerAction HandleUevent(const Uevent& uevent, std::set<std::string>* devices);
