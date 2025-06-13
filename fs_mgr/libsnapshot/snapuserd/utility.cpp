@@ -20,6 +20,7 @@
 #include <android-base/file.h>
 #include <android-base/logging.h>
 #include <android-base/properties.h>
+#include <com_android_libsnapshot.h>
 #include <libdm/dm.h>
 #include <processgroup/processgroup.h>
 
@@ -138,6 +139,10 @@ bool InitializeUringForMerge(struct io_uring* ring, int queue_depth) {
     }
 
     return true;
+}
+
+bool IsVabcWithUblkSupportEnabled() {
+    return com::android::libsnapshot::vabc_with_ublk_support();
 }
 
 }  // namespace snapshot
