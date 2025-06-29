@@ -14,13 +14,11 @@
 
 #include <liburing.h>
 #include <sys/resource.h>
-#include <sys/utsname.h>
 #include <unistd.h>
 
 #include <android-base/file.h>
 #include <android-base/logging.h>
 #include <android-base/properties.h>
-#include <com_android_libsnapshot.h>
 #include <libdm/dm.h>
 #include <processgroup/processgroup.h>
 
@@ -140,23 +138,5 @@ bool InitializeUringForMerge(struct io_uring* ring, int queue_depth) {
 
     return true;
 }
-
-bool IsVabcWithUblkSupportEnabled() {
-    return com::android::libsnapshot::vabc_with_ublk_support();
-}
-
-bool KernelSupportsUblk() {
-    struct utsname uts{};
-    unsigned int major, minor;
-
-    uname(&uts);
-    if (sscanf(uts.release, "%u.%u", &major, &minor) != 2) {
-        return false;
-    }
-
-    // We will only support kernels from 6.1 onwards
-    return major > 6 || (major == 6 && minor >= 1);
-}
-
 }  // namespace snapshot
 }  // namespace android

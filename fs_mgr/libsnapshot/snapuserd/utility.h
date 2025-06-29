@@ -30,7 +30,5 @@ bool CanUseUserspaceSnapshots();
 bool IsVendorFromAndroid12();
 
 bool InitializeUringForMerge(struct io_uring* ring, int queue_depth);
-bool KernelSupportsUblk();
-bool IsVabcWithUblkSupportEnabled();
 }  // namespace snapshot
 }  // namespace android
