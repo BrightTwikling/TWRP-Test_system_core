@@ -81,6 +81,8 @@ int Usage() {
                  "    Print snapshot states.\n"
                  "  merge\n"
                  "    Deprecated.\n"
+                 "  cancel\n"
+                 "    Cancel an initiated OTA if possible.\n"
                  "  map\n"
                  "    Map all partitions at /dev/block/mapper\n"
                  "  pause-merge\n"
@@ -560,6 +562,11 @@ bool MergeCmdHandler(int /*argc*/, char** argv) {
 }
 
 #ifdef SNAPSHOTCTL_USERDEBUG_OR_ENG
+bool CancelCmdHandler(int /*argc*/, char** argv) {
+    android::base::InitLogging(argv, TeeLogger(LogdLogger(), &StderrLogger));
+    return SnapshotManager::New()->CancelUpdate();
+}
+
 bool GetVerityPartitions(std::vector<std::string>& partitions) {
     auto& dm = android::dm::DeviceMapper::Instance();
     auto dm_block_devices = dm.FindDmPartitions();
@@ -1093,6 +1100,7 @@ static std::map<std::string, std::function<bool(int, char**)>> kCmdMap = {
         {"merge", MergeCmdHandler},
         {"map", MapCmdHandler},
 #ifdef SNAPSHOTCTL_USERDEBUG_OR_ENG
+        {"cancel", CancelCmdHandler},
         {"test-blank-ota", TestOtaHandler},
         {"apply-update", ApplyUpdate},
         {"map-snapshots", MapPrecreatedSnapshots},
