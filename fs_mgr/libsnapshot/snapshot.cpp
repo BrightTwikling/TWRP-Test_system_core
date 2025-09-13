@@ -3426,7 +3426,7 @@ bool SnapshotManager::MapAllSnapshots(const std::chrono::milliseconds& timeout_m
     }
 
     std::vector<std::string> snapshots;
-    if (!ListSnapshots(lock.get(), &snapshots)) {
+    if (!ListSnapshots(lock.get(), &snapshots, GetSnapshotSlotSuffix())) {
         return false;
     }
 
