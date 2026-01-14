@@ -4719,7 +4719,8 @@ bool SnapshotManager::HandleImminentDataWipe(const std::function<void()>& callba
         LOG(INFO) << "Update state before wipe: " << state << "; slot: " << GetCurrentSlot()
                   << "; suffix: " << device_->GetSlotSuffix();
     }
-
+    auto current_slot_number = SlotNumberForSlotSuffix(device_->GetSlotSuffix());
+    auto other_slot_number = SlotNumberForSlotSuffix(device_->GetOtherSlotSuffix());
     bool try_merge = false;
     switch (state) {
         case UpdateState::None:
@@ -4732,14 +4733,21 @@ bool SnapshotManager::HandleImminentDataWipe(const std::function<void()>& callba
                 break;
             }
             if (!HasForwardMergeIndicator()) {
-                auto slot_number = SlotNumberForSlotSuffix(device_->GetSlotSuffix());
-                auto other_slot_number = SlotNumberForSlotSuffix(device_->GetOtherSlotSuffix());
+                // There can be a case where delayed merge is set and factory reset/wipe
+                // is initiated before Merge was started. If we are under OTA, we are on
+                // target slot, and slot was marked successful, this means we should prefer
+                // merging instead of rollback.
+                if (device_->IsSlotMarkedSuccessful(current_slot_number)) {
+                    LOG(INFO) << "Slot is marked successful, allowing wipe and merge.";
+                    try_merge = true;
+                    break;
+                }
 
                 // We're not allowed to forward merge, so forcefully rollback the
                 // slot switch.
                 LOG(INFO) << "Allowing wipe due to lack of forward merge indicator; reverting to "
                              "old slot since update will be deleted.";
-                device_->SetSlotAsUnbootable(slot_number);
+                device_->SetSlotAsUnbootable(current_slot_number);
                 device_->SetActiveBootSlot(other_slot_number);
                 break;
             }
