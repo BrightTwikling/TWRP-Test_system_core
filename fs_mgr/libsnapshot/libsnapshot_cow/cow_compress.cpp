@@ -117,6 +117,7 @@ class GzCompressor final : public ICompressor {
             return {};
         }
         buffer.resize(dest_len);
+        buffer.shrink_to_fit();
         return buffer;
     };
 };
@@ -149,6 +150,7 @@ class Lz4Compressor final : public ICompressor {
         } else {
             buffer.resize(compressed_size);
         }
+        buffer.shrink_to_fit();
         return buffer;
     };
 };
@@ -203,6 +205,7 @@ class ZstdCompressor final : public ICompressor {
         } else {
             buffer.resize(compressed_size);
         }
+        buffer.shrink_to_fit();
         return buffer;
     };
 
@@ -221,6 +224,7 @@ bool CompressWorker::CompressBlocks(ICompressor* compressor, size_t block_size, 
     const uint8_t* iter = reinterpret_cast<const uint8_t*>(buffer);
     while (num_blocks) {
         auto data = compressor->Compress(iter, block_size);
+        data.shrink_to_fit();
         if (data.empty()) {
             PLOG(ERROR) << "CompressBlocks: Compression failed";
             return false;
