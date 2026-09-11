@@ -4913,6 +4913,10 @@ bool SnapshotManager::EnsureNoOverflowSnapshot(LockedFile* lock) {
             LOG(ERROR) << "Could not read snapshot device table: " << snapshot;
             return false;
         }
+        if (targets.empty()) {
+            LOG(ERROR) << "Snapshot device has an empty device-mapper table: " << snapshot;
+            return false;
+        }
         if (targets.size() != 1) {
             LOG(ERROR) << "Unexpected device-mapper table for snapshot: " << snapshot
                        << ", size = " << targets.size();
