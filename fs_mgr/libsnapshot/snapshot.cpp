@@ -3996,7 +3996,11 @@ Return SnapshotManager::CreateUpdateSnapshots(const DeltaArchiveManifest& manife
         vabc_disable_reason = "kernel missing userspace block device support";
     }
 
-    // Deduce supported features.
+    // Deduce supported features. TWRP keeps the legacy dm-snapshot backend for
+    // products that do not opt in to userspace snapshots, but an opted-in
+    // product must never silently create state that a newer first-stage init
+    // cannot consume.
+    const bool userspace_snapshots_requested = GetUserspaceSnapshotsEnabledProperty();
     bool userspace_snapshots = CanUseUserspaceSnapshots();
     bool legacy_compression = GetLegacyCompressionEnabledProperty();
     bool is_legacy_snapuserd = IsVendorFromAndroid12();
@@ -4030,8 +4034,12 @@ Return SnapshotManager::CreateUpdateSnapshots(const DeltaArchiveManifest& manife
 
     const bool using_snapuserd = userspace_snapshots || legacy_compression;
     if (!using_snapuserd) {
-        LOG(ERROR) << "Using legacy Virtual A/B (dm-snapshot)";
-        return Return::Error();
+        if (userspace_snapshots_requested) {
+            LOG(ERROR) << "Userspace snapshots were requested, refusing to fall back to legacy "
+                          "Virtual A/B (dm-snapshot)";
+            return Return::Error();
+        }
+        LOG(INFO) << "Using legacy Virtual A/B (dm-snapshot)";
     }
     auto disable_ublk_through_manifest = false;
     // Disabling UBLK based snapshots can be requested explicitly through manifest.
