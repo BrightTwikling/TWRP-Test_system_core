@@ -14,6 +14,7 @@
 
 #include <liburing.h>
 #include <sys/resource.h>
+#include <sys/utsname.h>
 #include <unistd.h>
 
 #include <android-base/file.h>
