@@ -275,6 +275,9 @@ cc_defaults {
 cc_library_static {
     name: "libinit",
     defaults: ["libinit_defaults"],
+    visibility: [
+        "//bootable/recovery:__subpackages__",
+    ],
 }
 
 cc_library_static {
