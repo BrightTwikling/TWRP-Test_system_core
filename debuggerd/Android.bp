@@ -16,7 +16,6 @@ cc_defaults {
         "-Os",
         "-fno-finite-loops",
         "-DANDROID_DEBUGGABLE=0",
-        "-DANDROID_DISABLE_TLS_FOR_LINKER=1",
     ],
 
     local_include_dirs: ["include"],
@@ -217,7 +216,7 @@ cc_library {
 
     whole_static_libs: [
         "libtombstone_proto",
-        "libprotobuf-cpp-lite-notls-for-linker",
+        "libprotobuf-cpp-lite",
     ],
 
     shared_libs: [
@@ -279,7 +278,7 @@ cc_library_static {
         "gwp_asan_crash_handler",
         "libtombstone_proto",
         "libprocinfo",
-        "libprotobuf-cpp-lite-notls-for-linker",
+        "libprotobuf-cpp-lite",
         "libscudo",
     ],
 
@@ -342,7 +341,7 @@ cc_binary {
         "libbase",
         "libdebuggerd_tombstone_proto_to_text",
         "liblog",
-        "libprotobuf-cpp-lite-notls-for-linker",
+        "libprotobuf-cpp-lite",
         "libtombstone_proto",
     ],
 }
@@ -466,7 +465,7 @@ cc_binary {
         "libcutils",
 
         "libtombstone_proto",
-        "libprotobuf-cpp-lite-notls-for-linker",
+        "libprotobuf-cpp-lite",
 
         "libnative_bridge_guest_state_accessor",
     ],
