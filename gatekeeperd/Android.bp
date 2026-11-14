@@ -74,6 +74,7 @@ filegroup {
 
 cc_library_shared {
     name: "libgatekeeper_aidl",
+    recovery_available: true,
     srcs: [
         ":gatekeeper_aidl",
         "GateKeeperResponse.cpp",

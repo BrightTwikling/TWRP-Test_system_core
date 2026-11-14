@@ -170,6 +170,7 @@ cc_library_static {
 
 cc_library {
     name: "libdebuggerd_client",
+    recovery_available: true,
     defaults: ["debuggerd_defaults"],
     srcs: [
         "client/debuggerd_client.cpp",

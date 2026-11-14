@@ -4,6 +4,7 @@ package {
 
 cc_library {
     name: "libvndksupport",
+    recovery_available: true,
     native_bridge_supported: true,
     llndk: {
         symbol_file: "libvndksupport.map.txt",
