@@ -281,6 +281,16 @@ cc_library_static {
 }
 
 cc_library_static {
+    name: "libinit_recovery",
+    defaults: ["libinit_defaults"],
+    visibility: [
+        "//bootable/recovery:__subpackages__",
+    ],
+    stem: "init",
+    recovery: true,
+}
+
+cc_library_static {
     name: "libinit.microdroid",
     defaults: [
         "avf_build_flags_cc",
